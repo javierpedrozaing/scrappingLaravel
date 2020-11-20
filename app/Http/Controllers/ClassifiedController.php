@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Goutte\Client;
 use App\Category;
 use App\Subcategory;
+use App\Classified;
 
 class ClassifiedController extends Controller
 {
@@ -16,6 +17,8 @@ class ClassifiedController extends Controller
         return $source;
     }
 
+    // TODO
+    // Improve this function for insert from form using post method
     public function insertCategories() {
         
         $source = $this->initScrapper();
@@ -55,6 +58,8 @@ class ClassifiedController extends Controller
     }
 
 
+    // TODO
+    // Improve this function for insert from form using post method
     public function insertSubCategories() {
         $source = $this->initScrapper();
         $subCategories = $source->filter('.cat2Item .cat2')->each(function ($node) {
@@ -92,7 +97,68 @@ class ClassifiedController extends Controller
         }
     }
 
+    public function insertClassifieds() {
+        $announcements = [];
+        $descriptions = [];
+        $prices = [];
+        $client = new Client();
+        $source = $client->request('GET', 'https://www.milanuncios.com/categories');    
+        $success = false;
+        $source = $this->initScrapper();        
+
+        $link = $source->selectLink('Motor')->link();
+        $data = $client->click($link);
+        $announcements = $data->filter('.aditem .aditem-detail .aditem-detail-title')->each(function ($node) {
+            return $node->text();
+        });
+
+        $descriptions[] = $data->filter('.aditem .aditem-detail .tx')->each(function ($node) {
+            return $node->text();
+        });
+
+
+        $prices[] = $data->filter('.aditem .aditem-detail .aditem-price')->each(function ($node) {
+            return $node->text();
+        });
+
+        
+        if (is_array($announcements) && !empty($announcements)) {
+            foreach ($announcements as $key => $announcement) {                
+                $category = 145; // TODO- fix for get category_id respective
+                try {
+                    //instance of model
+                    $classified = new Classified;
+                    $classified->title = trim($announcement);
+                    $classified->description = (!empty($descriptions[0][$key])) ? substr($descriptions[0][$key], 0, 150) : "";
+                    $classified->image = "";
+                    $classified->price =  (!empty($prices[0][$key])) ? $prices[0][$key] : "" ;
+                    $classified->category_id = $category;
+                    
+                    //save in database
+                    if($classified->save())
+                    {
+                        $success = true;
+                    }
+
+                } catch (\Exception $e) {
+                    // maybe log this exception, but basically it's just here so we can rollback if we get a surprise
+                    echo $e->getMessage();
+                    exit();
+                }
+            }
+        }
+        if ($success) {                        
+            echo "Anuncio creado satisfactoriamente!";
+            
+        } else {            
+            echo "Anuncio no pudo ser creado, inténtalo nuevamente.";
+        }
+
+
+    }
+
     public function listAds() {
+        
         $client = new Client();
         $source = $client->request('GET', 'https://www.milanuncios.com/categories');        
         
@@ -103,5 +169,17 @@ class ClassifiedController extends Controller
         });
         return response()->json(['data' => $announcements], 200);
 
+    }
+
+    public function filterByCategory($category_id) {
+        return Classified::where("category_id", $category_id)->get();
+    }
+
+    public function filterByTitle($title) {
+        return Classified::where("title", $title)->get();
+    }
+
+    public function filterByDescription($description) {
+        return Classified::where("description", $description)->get();
     }
 }

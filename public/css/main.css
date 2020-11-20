@@ -1,0 +1,44 @@
+
+
+/* START STYLE FOR EACH ADS */
+.container .aditem-header {
+    border: 1px solid red;
+    margin: 60px 0 10px 0;    
+    padding:10px 30px;
+    font-weight: bold;
+}
+
+
+
+.aditem-detail-image-container {
+    border: 1px solid #000;
+    padding:30px;
+}
+
+.aditem-detail-image-container .aditem-detail {
+    width: 50%;
+    display: inline-block;
+}
+
+.aditem-buttons {
+    display: none;
+}
+
+.flex-content .display-desktop {
+    width: 40%;
+    display: inline-block;
+    vertical-align: super;
+}
+
+.flex-content .aditem-detail .display-desktop {
+    display: block;
+}
+
+.flex-content .aditem-detail .display-desktop img {
+    width: auto;
+    margin: 50px;
+}
+
+
+/* END STYLE FOR EACH ADS */
+

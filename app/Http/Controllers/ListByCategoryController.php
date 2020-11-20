@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Goutte\Client;
+use View;
 
 class ListByCategoryController extends Controller
 {
@@ -33,7 +34,7 @@ class ListByCategoryController extends Controller
             if (empty($announcements)) {
                 return "no se encontraron resultados";
             } else {
-                print_r($announcements);
+                return View::make("list_by_category")->with(['announcements' => $announcements]);
             }
         
             

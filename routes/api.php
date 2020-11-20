@@ -17,4 +17,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('anuncios', 'ClassifiedController@listAds')->name('listar-anuncios');
+Route::get('anuncios', 'ClassifiedController@listAds');
+
+Route::get('insertSubCategories','ClassifiedController@insertSubCategories');
+Route::get('filterByCategory/{category_id}', 'ClassifiedController@filterByCategory');
+Route::get('filterByTitle/{title}', 'ClassifiedController@filterByTitle');
+Route::get('filterByDescription/{description}', 'ClassifiedController@filterByDescription');

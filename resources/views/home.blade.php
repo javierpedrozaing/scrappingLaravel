@@ -27,7 +27,7 @@
             <div class="row">
             <ul>
                 @foreach($subcategories as $subcat)
-                    <li><a href="/category/<?= ucwords($cat->nombre) ?>">{{$subcat->nombre}}</a></li>
+                    <li><a href="/category/<?= ucwords($subcat->nombre) ?>">{{$subcat->nombre}}</a></li>
                 @endforeach                            
             </ul>
             
