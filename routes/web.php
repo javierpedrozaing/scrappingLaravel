@@ -14,3 +14,7 @@
 Route::get('/','HomeController@index');
 
 Route::get('category/{name}','ListByCategoryController@getList')->name('category');
+
+Route::get('insertCategories','ClassifiedController@insertCategories');
+
+Route::get('insertSubCategories','ClassifiedController@insertSubCategories');

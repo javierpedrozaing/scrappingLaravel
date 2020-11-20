@@ -4,14 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Goutte\Client;
+use View;
+use App\Category;
+use App\Subcategory;
 
 class HomeController extends Controller
 {
     public function index() {
         
-        $categories = $this->getCategorization("categories");
-        $subcategories = $this->getCategorization("subcategories");
-
+        $categories = Category::all();
+        $subcategories = Subcategory::all();
+        return View::make("home")->with(['categories' => $categories, 'subcategories' => $subcategories]);
     }
 
     public function getCategorization($type = "") {

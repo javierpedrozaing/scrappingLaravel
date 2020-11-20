@@ -66,7 +66,7 @@ class ScrapeComand extends Command
                 try {
                     //instance of model
                     $cat = new Category;
-                    $cat->nombre = $category;                    
+                    $cat->nombre = $category;               
                     
                     //save in database
                     if($cat->save()) {
@@ -82,13 +82,11 @@ class ScrapeComand extends Command
         }
 
         if ($success) {
-            DB::commit();
-            //Session::flash("mensaje","Campo creado satisfactoriamente!");
+            DB::commit();            
             echo "Categorias creadas satisfactoriamente!";
             
         } else {
-            DB::rollback();
-            //Session::flash("errordataform","El campo no pudo ser creado, inténtalo nuevamente.");            
+            DB::rollback();            
             echo "La categoría no pudo ser creada, inténtalo nuevamente.";
         }
 
@@ -98,12 +96,13 @@ class ScrapeComand extends Command
         $success = false;
         if (is_array($subCategories) && !empty($subCategories)) {
             foreach ($subCategories as $key => $subcat) {
+                $category = rand(145, 176);
                 DB::beginTransaction();
                 try {
                     //instance of model
                     $subCategory = new Subcategory;
                     $subCategory->name = $subcat;
-                    
+                    $subCategory->category_id = $category;
                     //save in database
                     if($subCategory->save())
                     {
@@ -118,13 +117,11 @@ class ScrapeComand extends Command
             }
         }
         if ($success) {
-            DB::commit();
-            //Session::flash("mensaje","Campo creado satisfactoriamente!");
+            DB::commit();            
             echo "Sub-Categorias creadas satisfactoriamente!";
             
         } else {
-            DB::rollback();
-            //Session::flash("errordataform","El campo no pudo ser creado, inténtalo nuevamente.");            
+            DB::rollback();            
             echo "La Sub-Categoría no pudo ser creada, inténtalo nuevamente.";
         }
     }

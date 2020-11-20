@@ -9,14 +9,13 @@ class ListByCategoryController extends Controller
 {
     public function getList(Request $request, $name) {
         if ($request->isMethod('get')) {         
-
             $category = ucwords($name);        
-            
+
             $client = new Client();
             $announcements = [];   
             // use a url 404 random for get the category list
             $source = $client->request('GET', 'https://www.milanuncios.com/categories');        
-            
+
             try {
                 $link = $source->selectLink($category)->link();
                 $crawler = $client->click($link);
